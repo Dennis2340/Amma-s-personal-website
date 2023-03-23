@@ -1,18 +1,20 @@
-// const mongoose = require("mogoose")
-// const Schema = mongoose.Schema
+const mongoose = require("mongoose")
+const Schema = mongoose.Schema
 
-// const peomSchema = new Schema({
-//     peomTitle :{
-//         type: String,
-//         required : true
-//     },
-//     peomDetails: {
-//         type: String,
-//         required: true
-//     }
-// })
+const poemSchema = new Schema({
+    poemTitle :{
+        type: String,
+        required : true
+    },
+    poemGenre : {
+      type: String,
+      required: true
+    },
+    poemDetails: {
+        type: String,
+        required: true
+    }
+})
 
-const dataBase = require("../config/firebaseConfig")
-
-const peom = dataBase.collection("peom")
-module.exports = peom
+const poem = mongoose.model("peom", poemSchema)
+module.exports = poem

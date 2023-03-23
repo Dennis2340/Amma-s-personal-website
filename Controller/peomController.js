@@ -1,4 +1,4 @@
-// const peomCollection = require("../Model/peoms")
+const peomCollection = require("../Model/peoms")
 
 // // const getAllPeoms = async(req,res) => {
 // //    const peoms = await peomCollection
