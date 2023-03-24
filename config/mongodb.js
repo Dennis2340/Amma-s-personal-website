@@ -5,11 +5,11 @@ const connectDB = async () => {
   console.log('MongoDB connection with retry');
   try{
 
-  await mongoose.connect('mongodb://localhost:27017/mydb', {
+  await mongoose.connect(process.env.DATABASE_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false
+    // useCreateIndex: true,
+    // useFindAndModify: false
     })
 }catch(err) {
   console.log('MongoDB connection unsuccessful, retry after 5 seconds.');
