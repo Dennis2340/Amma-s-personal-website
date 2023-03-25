@@ -16,14 +16,15 @@ connectDB()
 app.use(express.json());
 app.use(cors(corsOption));
 
-app.post("/addPoem", poemController.addNewPoem);
+app.post("/poem/addPoem", poemController.addNewPoem);
+// app.use("/addPoem", require("./Routes/peomRoute"))
 
-app.get("/getAllPoems", poemController.getAllPoems);
-app.get("/getSinglePoem/:id", poemController.getSinglePoem) 
+app.get("/poem/getAllPoems", poemController.getAllPoems);
+app.get("/poem/getSinglePoem/:id", poemController.getSinglePoem) 
 
-app.delete("/deletePoem/:id", poemController.deletePoem)
+app.delete("/poem/deletePoem/:id", poemController.deletePoem)
 
-app.put("/updatePoem/:id", poemController.updatePoem)
+app.put("/poem/updatePoem/:id", poemController.updatePoem)
 
 
 

@@ -1,17 +1,21 @@
 
 
+const { set } = require("mongoose");
 const poem = require("../Model/peoms")
-
+const { format } = require("date-fns")
+const { formatDistanceToNow } = require("date-fns")
 // add new peom and prevent duplication also!!
 const addNewPoem = async(req, res) => {
-    if(!req?.body?.poemTitle || !req?.body?.poemGenre || !req?.body?.poemDetails){
-        return res.status(400).json({message : "Poem title, poem genre and poem details are required"});
+    if(!req?.body?.poemTitle || !req?.body?.poemGenre || !req?.body?.poemDetails || !req?.body?.poemAuthor){
+        return res.status(400).json({message : "Poem title, poem genre, poem author and poem details are required"});
     }
     try{
         const isDuplicate = await poem.exists({  
             poemTitle: req.body.poemTitle ,
             poemGenre: req.body.poemGenre ,
-            poemDetails: req.body.poemDetails,  
+            poemDetails: req.body.poemDetails,
+            poemAuthor : req.body.poemAuthor
+            
           });
       
           if (isDuplicate) {
@@ -22,7 +26,9 @@ const addNewPoem = async(req, res) => {
         const result = await poem.create({
             poemTitle: req.body.poemTitle,
             poemGenre: req.body.poemGenre,
-            poemDetails: req.body.poemDetails
+            poemDetails: req.body.poemDetails,
+            poemAuthor : req.body.poemAuthor,
+            createdAt: format(new Date(), "MMMM-dd',' yyyy hh:mm aaa")
         });
         result.save()
         console.log("new poem added");
@@ -54,20 +60,25 @@ const getAllPoems =  async (req, res) => {
     }
  } 
 
- const updatePoem = async(req,res) => {
-    try{
-        if(!req?.body) return res.status(201).json({message: "nothing to be updated"})
-        const updatedPoem = await poem.findByIdAndUpdate(req.params.id, {
-            poemTitle: req.body.poemTitle,
-            poemGenre: req.body.poemGenre,
-            poemDetails: req.body.poemDetails
-        })
-        // updatePoem.save()
-        res.status(400).json({message: "peom updated"})
-    }catch(err){
-        console.log(err)
-    }
+ const updatePoem = async (req, res) => {
+  try {
+    if (!req?.body) return res.status(400).json({ message: "Nothing to be updated" });
+    
+    const updatedPoem = await poem.findByIdAndUpdate(req.params.id, {
+      poemTitle: req.body.poemTitle,
+      poemGenre: req.body.poemGenre,
+      poemDetails: req.body.poemDetails,
+      poemAuthor: req.body.poemAuthor,
+      updateAt: format(new Date(), "MMMM-dd',' yyyy hh:mm aaa")
+    }, { new: true });
+
+    res.status(200).json({ updatedPoem });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Server Error" });
   }
+}
+
 
  const deletePoem =  async(req, res) => {
     try {
