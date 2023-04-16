@@ -24,5 +24,5 @@ const articleSchema = new Schema({
     }
 })
 
-const article = mongoose.model("peom", articleSchema)
+const article = mongoose.model("article", articleSchema)
 module.exports = article
