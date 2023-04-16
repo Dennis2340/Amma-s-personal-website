@@ -1,10 +1,8 @@
-
-
 const { set } = require("mongoose");
 const poem = require("../Model/peoms")
 const { format } = require("date-fns")
 const { formatDistanceToNow } = require("date-fns")
-// add new peom and prevent duplication also!!
+// add new peom and prevent duplication also!!!
 const addNewPoem = async(req, res) => {
     if(!req?.body?.poemTitle || !req?.body?.poemGenre || !req?.body?.poemDetails || !req?.body?.poemAuthor){
         return res.status(400).json({message : "Poem title, poem genre, poem author and poem details are required"});
@@ -15,7 +13,6 @@ const addNewPoem = async(req, res) => {
             poemGenre: req.body.poemGenre ,
             poemDetails: req.body.poemDetails,
             poemAuthor : req.body.poemAuthor
-            
           });
       
           if (isDuplicate) {
@@ -30,7 +27,7 @@ const addNewPoem = async(req, res) => {
             poemAuthor : req.body.poemAuthor,
             createdAt: format(new Date(), "MMMM-dd',' yyyy hh:mm aaa")
         });
-        result.save()
+       
         console.log("new poem added");
         return res.status(201).json({message: "New poem added."});
     } catch(error){
@@ -69,7 +66,7 @@ const getAllPoems =  async (req, res) => {
       poemGenre: req.body.poemGenre,
       poemDetails: req.body.poemDetails,
       poemAuthor: req.body.poemAuthor,
-      updateAt: format(new Date(), "MMMM-dd',' yyyy hh:mm aaa")
+      updatedAt: format(new Date(), "MMMM-dd',' yyyy hh:mm aaa")
     }, { new: true });
 
     res.status(200).json({ updatedPoem });
@@ -93,7 +90,7 @@ const getAllPoems =  async (req, res) => {
       res.status(500).json({ message: "Server error" });
     }
   }
-  
+
  module.exports = {
     addNewPoem,
     getAllPoems,

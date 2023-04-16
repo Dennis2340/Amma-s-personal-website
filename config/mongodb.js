@@ -11,6 +11,7 @@ const connectDB = async () => {
     // useCreateIndex: true,
     // useFindAndModify: false
     })
+    
 }catch(err) {
   console.log('MongoDB connection unsuccessful, retry after 5 seconds.');
   setTimeout(connectDB, 5000);
