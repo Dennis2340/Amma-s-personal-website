@@ -1,11 +1,11 @@
 const express = require("express")
-const Router = express.Router()
+const router = express.Router()
 const poemController = require("../Controller/peomController")
 
-Router.post("/", poemController.addNewPoem)
-Router.get('/', poemController.getAllPoems);
-Router.get('/', poemController.getSinglePoem);
-Router.put('/', poemController.updatePoem);
-Router.delete('/', poemController.deletePoem);
+router.post("/:id", poemController.addNewPoem)
+router.get('/', poemController.getAllPoems);
+router.get('/', poemController.getSinglePoem);
+router.put('/:id', poemController.updatePoem);
+router.delete('/:id', poemController.deletePoem);
 
-module.exports = Router
+module.exports = router

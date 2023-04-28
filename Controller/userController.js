@@ -1,0 +1,75 @@
+const { set } = require("mongoose");
+const users = require("../Model/users")
+const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
+const rolesEmail = require("../config/roles_lists")
+const addNewUser= async(req, res) => {
+    if(!req?.body?.userName || !req?.body?.userEmail || !req?.body?.userPassword){
+        return res.status(400).json({message : "Name, Email and Password of the user are required"});
+    }
+    try{
+        const {  userEmail } = req.body
+        if(!(userEmail  in rolesEmail)) return res.status(500).json({msg : "You are not authorized to register"})
+ 
+          const passwordHashed = await bcrypt.hash(req.body.userPassword, 10)
+        const result = await users.create({
+           userName: req.body.userName,
+           userEmail: req.body.userEmail,
+           userPhoneNumber: req.body.userPhoneNumber,
+           userDescription : req.body.userDescription,
+           userPassword: passwordHashed
+        });
+
+        const savedUser = await result.save();
+        res.status(201).json({savedUser})
+       
+        console.log("new user added");
+        return res.status(201).json({message: "New User added."});
+    } catch(error){
+        console.log(error);
+        return res.status(500).json({message : "Internal Server Error"});
+    }
+};
+
+const updateUser = async(req, res) => {
+    try {
+        if (!req?.body) return res.status(400).json({ message: "Nothing to be updated" });
+        
+        const updatedUser = await users.findByIdAndUpdate(req.params.id, {
+            userName: req.body.userName,
+            userEmail: req.body.userEmail,
+            userPhoneNumber: req.body.userPhoneNumber,
+            userDescription : req.body.userDescription,
+            userPassword: passwordHashed
+        }, { new: true });
+    
+        res.status(200).json({ updatedUser });
+      } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: "Server Error" });
+      }
+}
+
+const login = async (req, res) => {
+    try {
+        const { userEmail, userPassword }  = req.body
+        const user = await users.findOne({ email : userEmail})
+        if(!user) return res.status(400).json({msg: "User Does not exist"})
+
+        const isMatch = await bcrypt.compare(userPassword, user.userPassword)
+        if(!isMatch) return res.status(400).json({msg : "Invalid credentials"})
+
+        const token = jwt.sign({ id: _id}, process.env.JWT_SECRET)
+        delete user.userPassword
+        res.status(200).json({ token, user})
+    } catch (error) {
+        res.status(500).json({ error : error.message})
+    }
+}
+
+
+module.exports = {
+    addNewUser,
+    login,
+    updateUser
+}
