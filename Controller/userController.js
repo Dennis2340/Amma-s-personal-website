@@ -9,7 +9,7 @@ const addNewUser= async(req, res) => {
     }
     try{
         const {  userEmail } = req.body
-        if(!(userEmail  in rolesEmail)) return res.status(500).json({msg : "You are not authorized to register"})
+        if(userEmail  !== rolesEmail[0]) return res.status(500).json({msg : "You are not authorized to register"})
  
           const passwordHashed = await bcrypt.hash(req.body.userPassword, 10)
         const result = await users.create({
@@ -34,7 +34,7 @@ const addNewUser= async(req, res) => {
 const updateUser = async(req, res) => {
     try {
         if (!req?.body) return res.status(400).json({ message: "Nothing to be updated" });
-        
+        const passwordHashed = await bcrypt.hash(req.body.userPassword, 10)
         const updatedUser = await users.findByIdAndUpdate(req.params.id, {
             userName: req.body.userName,
             userEmail: req.body.userEmail,
@@ -53,13 +53,13 @@ const updateUser = async(req, res) => {
 const login = async (req, res) => {
     try {
         const { userEmail, userPassword }  = req.body
-        const user = await users.findOne({ email : userEmail})
+        const user = await users.findOne({ userEmail : userEmail})
         if(!user) return res.status(400).json({msg: "User Does not exist"})
 
         const isMatch = await bcrypt.compare(userPassword, user.userPassword)
         if(!isMatch) return res.status(400).json({msg : "Invalid credentials"})
 
-        const token = jwt.sign({ id: _id}, process.env.JWT_SECRET)
+        const token = jwt.sign({ id: user.id}, process.env.JWT_SECRET)
         delete user.userPassword
         res.status(200).json({ token, user})
     } catch (error) {

@@ -25,7 +25,7 @@ app.use(cors(corsOption));
 ///////// This is the user Routes and RestApi //////////////////
 app.post("/user/register", userController.addNewUser)
 app.post("/user/login", userController.login)
-app.put("/user/updateUser", verifyToken,userController.updateUser)
+app.put("/user/updateUser/:id", verifyToken,userController.updateUser)
 ///////// This is the poem Routes and RestApi //////////////////
 app.post("/poem/addPoem", verifyToken,poemController.addNewPoem);
 app.get("/poem/getAllPoems", poemController.getAllPoems);
