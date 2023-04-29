@@ -1,3 +1,3 @@
-const Roles_List_Emails = ["kamaradennis36@gmail.com", ]
+const Roles_List_Emails = [ "josephemsamah@gmail.com", ]
 
 module.exports = Roles_List_Emails
