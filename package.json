@@ -21,7 +21,8 @@
     "nodemon": "^2.0.21"
   },
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "node index.js",
+    "build": "npm install"
   },
   "repository": {
     "type": "git",
