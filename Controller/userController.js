@@ -10,6 +10,10 @@ const addNewUser= async(req, res) => {
         return res.status(400).json({message : "Name, Email and Password of the user are required"});
     }
     try{
+
+        const {  userEmail } = req.body
+        if(userEmail  !== rolesEmail[0]) return res.status(500).json({msg : "You are not authorized to register"})
+ 
         const { originalname, buffer } = req.file;
         const url = await uploadFileToFirebase(originalname, buffer)
         const passwordHashed = await bcrypt.hash(req.body.userPassword, 10)
@@ -27,9 +31,7 @@ const addNewUser= async(req, res) => {
           }
 
       
-        const {  userEmail } = req.body
-        if(userEmail  !== rolesEmail[0]) return res.status(500).json({msg : "You are not authorized to register"})
- 
+       
         //if(users.length === 1) return res.status(500).json({msg: "Cannot add morethan one user"})
         const result = await users.create({
            userName: req.body.userName,
