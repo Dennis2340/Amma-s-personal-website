@@ -14,7 +14,8 @@ const motMessageController = require("./Controller/motMessageController")
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 const userController = require("./Controller/userController")
-const verifyToken = require("./middleware/verifyJWT")
+const verifyToken = require("./middleware/verifyJWT");
+const handleHeaderError = require("./middleware/handlesHeaderError");
 // connects to mongodb 
 connectDB()
 
@@ -23,7 +24,7 @@ app.use(cors(corsOption));
 
 
 ///////// This is the user Routes and RestApi //////////////////
-app.post("/user/register", userController.addNewUser)
+app.post("/user/register",upload.single("picture"), handleHeaderError,userController.addNewUser)
 app.post("/user/login", userController.login)
 app.put("/user/updateUser/:id", verifyToken,userController.updateUser)
 ///////// This is the poem Routes and RestApi //////////////////
@@ -37,7 +38,7 @@ app.put("/poem/updatePoem/:id", verifyToken,poemController.updatePoem)
 app.post("/addVideo",upload.single("video"),verifyToken ,videoController.create)
 app.get("/getAllVideos", videoController.getAllVideos)
 app.get("/getSingleVideo/:id", videoController.getSingleVideo)
-app.get("/deleteSingleVideo/:id", verifyToken,videoController.deleteVideo)
+app.delete("/deleteSingleVideo/:id", verifyToken,videoController.deleteVideo)
 
 ///////// This is the Story Routes and RestApi //////////////////
 app.post("/story/addStory", verifyToken,storyController.addNewStory);

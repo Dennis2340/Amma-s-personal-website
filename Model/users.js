@@ -21,6 +21,10 @@ const userSchema = new Schema({
     userDescription: {
       type: String,
       required: true
+    },
+    pictureUrl: {
+      type: String,
+      required: true
     }
    
 

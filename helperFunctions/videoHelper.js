@@ -14,13 +14,6 @@ const uploadFileToFirebase = async function(originalname, buffer) {
   const fileName = uuid + "-" + originalname;
   const file = bucket.file(fileName);
   
-  // file.makePublic()
-  // .then(() => {
-  //   console.log(`File ${fileName} is now publicly accessible`);
-  // })
-  // .catch((err) => {
-  //   console.error(`Error making file ${fileName} public: ${err}`);
-  // });
   await file.save(buffer, {contentType: "multipart/form-data"}, function(err) {
     if (err) {
       throw new Error(`Failed to upload file ${fileName}: ${err}`);
