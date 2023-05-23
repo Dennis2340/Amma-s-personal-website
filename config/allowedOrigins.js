@@ -1,5 +1,5 @@
 const allowedOrigins = [
-    "https://localhost:3000/poems"
+    "http://localhost:3000"
 ]
 
 module.exports = allowedOrigins
