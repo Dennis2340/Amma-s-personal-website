@@ -22,7 +22,10 @@ connectDB()
 
 app.use(express.json());
 app.use(cors(corsOption));
-
+///////// This set the access control origin
+app.use( (req, res, next)=> {
+  req.header('Access-Control-Allow-Origin', "https://localhost:3000")
+})
 
 ///////// This is the user Routes and RestApi //////////////////
 app.post("/user/register",upload.single("picture"), handleHeaderError,userController.addNewUser)
