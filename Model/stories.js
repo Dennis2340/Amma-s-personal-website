@@ -20,7 +20,7 @@ const storySchema = new Schema({
     },
     createdAt: {
         type: Date, 
-        default: format(new Date(), "MMMM-dd',' yyyy hh:mm aaa")
+        default: new Date().getTime()
     }
 })
 
