@@ -44,7 +44,7 @@ const getAllVideos =  async (req, res) => {
 
     
     
-    return res.status(200).json({ ...videos,arrayOfVideoUrls });
+    return res.status(200).json({ videos,...arrayOfVideoUrls });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Unable to get videos" });
