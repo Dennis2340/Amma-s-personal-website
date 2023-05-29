@@ -30,7 +30,7 @@ const addNewArticle = async(req, res) => {
         });
        
         console.log("new article added");
-        return res.status(201).json({message: "New article added."});
+        return res.status(201).json(result);
     } catch(error){
         console.log(error);
         return res.status(500).json({message : "Internal Server Error"});

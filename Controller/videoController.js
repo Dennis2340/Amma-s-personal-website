@@ -12,7 +12,7 @@ const create = async function(req, res) {
     const { originalname, buffer } = req.file;
     const url = await uploadFileToFirebase(originalname, buffer);
     
-    const video = new Video({
+    const video = await Video.create({
       title: req.body.title,
       description: req.body.description,
       videoUrl : url,
