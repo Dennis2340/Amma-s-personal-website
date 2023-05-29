@@ -29,7 +29,7 @@ const addNewPoem = async(req, res) => {
         });
        
         console.log("new poem added");
-        return res.status(201).json({message: "New poem added."});
+        return res.status(201).json({result});
     } catch(error){
         console.log(error);
         return res.status(500).json({message : "Internal Server Error"});
