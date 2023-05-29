@@ -3,7 +3,8 @@ const users = require("../Model/users")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const rolesEmail = require("../config/roles_lists")
-const uploadFileToFirebase = require("../helperFunctions/videoHelper")
+const uploadFileToFirebase = require("../helperFunctions/videoHelper");
+const user = require("../Model/users");
 
 const addNewUser= async(req, res) => {
     if(!req?.body?.userName || !req?.body?.userEmail || !req?.body?.userPassword){
@@ -56,6 +57,16 @@ const addNewUser= async(req, res) => {
     }
 };
 
+const userInfo = async(req,res) => {
+ try {
+    const response = await user.find({})
+    return res.status(200).json({ response });
+
+ } catch (error) {
+    console.log(error.message)
+    return res.status(500).json({ message: "Unable to get user" });
+ }
+}
 const updateUser = async(req, res) => {
     try {
         if (!req?.body) return res.status(400).json({ message: "Nothing to be updated" });
@@ -96,5 +107,6 @@ const login = async (req, res) => {
 module.exports = {
     addNewUser,
     login,
-    updateUser
+    updateUser,
+    userInfo
 }
