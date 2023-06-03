@@ -21,11 +21,7 @@ const create = async function(req, res) {
 
     await video.save();
     
-    res.status(201).json({
-      success: true,
-      message: 'Video created successfully.',
-      data: video
-    });
+    res.status(201).json({ video });
 }catch(error){
 console.log(error)
 }
