@@ -30,11 +30,11 @@ app.post("/user/register",upload.single("picture"), handleHeaderError,userContro
 app.post("/user/login", userController.login)
 app.put("/user/updateUser/:id", userController.updateUser)
 ///////// This is the poem Routes and RestApi //////////////////
-app.post("/poem/addPoem", poemController.addNewPoem);
+app.post("/poem/addPoem", verifyToken,poemController.addNewPoem);
 app.get("/poem/getAllPoems", poemController.getAllPoems);
 app.get("/poem/getSinglePoem/:id", poemController.getSinglePoem) 
-app.delete("/poem/deletePoem/:id",poemController.deletePoem)
-app.put("/poem/updatePoem/:id", poemController.updatePoem)
+app.delete("/poem/deletePoem/:id",verifyToken,poemController.deletePoem)
+app.put("/poem/updatePoem/:id", verifyToken,poemController.updatePoem)
    
 ///////// This is the Video Routes and RestApi //////////////////
 app.post("/addVideo",upload.single("video") ,videoController.create)
