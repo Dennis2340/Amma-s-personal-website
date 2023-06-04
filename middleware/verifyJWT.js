@@ -15,7 +15,7 @@ const verifyToken = async (req, res, next) => {
 
     // Check if the token has expired
     const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
-    const expirationTime = verified.iat + 60; // Expiration time: 1 minute (60 seconds)
+    const expirationTime = verified.iat + 5 *  24 * 60 * 60; // Expiration time: 1 minute (60 seconds)
 
     if (expirationTime < currentTime) {
       return res.status(401).json({ msg: "Token has expired. Please login again." });
