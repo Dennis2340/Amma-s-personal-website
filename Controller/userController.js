@@ -56,16 +56,33 @@ const addNewUser= async(req, res) => {
     }
 };
 
-const userInfo = async(req,res) => {
- try {
-    const response = await user.find({})
-    return res.status(200).json({ response });
-
- } catch (error) {
-    console.log(error.message)
-    return res.status(500).json({ message: "Unable to get user" });
- }
-}
+const userInfo = async (req, res) => {
+    try {
+      const singleUser = await user.findById(req.params.id);
+      if (!singleUser) return res.status(404).json({ message: "User not found" });
+  
+      const url = singleUser.pictureUrl;
+      const filename = url.split("/");
+      const filePath = filename[filename.length - 1];
+  
+      // Get a reference to the picture file in Firebase Storage
+      const bucket = admin.storage().bucket();
+      const file = bucket.file(filePath);
+  
+      // Stream the file contents to the client using the response object
+      const stream = file.createReadStream();
+      stream.on("error", (err) => {
+        console.error(`Error streaming file ${filePath}:`, err);
+        res.sendStatus(500);
+      });
+      stream.pipe(res);
+    } catch (error) {
+      console.error(`Error reading file ${filePath}:`, error);
+      res.sendStatus(500);
+    }
+  };
+  
+  
 const updateUser = async(req, res) => {
     try {
         if (!req?.body) return res.status(400).json({ message: "Nothing to be updated" });

@@ -25,7 +25,7 @@ app.use(cors(corsOption));
 
 
 ///////// This is the user Routes and RestApi //////////////////
-app.get("/user/getUserInfo", userController.userInfo)
+app.get("/user/getUserInfo/:id", userController.userInfo)
 app.post("/user/register",upload.single("picture"), handleHeaderError,userController.addNewUser)
 app.post("/user/login", userController.login)
 app.put("/user/updateUser/:id", userController.updateUser)
