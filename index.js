@@ -37,7 +37,7 @@ app.delete("/poem/deletePoem/:id",verifyToken,poemController.deletePoem)
 app.put("/poem/updatePoem/:id", verifyToken,poemController.updatePoem)
    
 ///////// This is the Video Routes and RestApi //////////////////
-app.post("/addVideo",upload.single("video") ,verifyToken,videoController.create)
+app.post("/addVideo",upload.single("video"), verifyToken,videoController.create)
 app.get("/getAllVideos", videoController.getAllVideos)
 app.get("/getSingleVideo/:id", videoController.getSingleVideo)
 app.delete("/deleteSingleVideo/:id", verifyToken,videoController.deleteVideo)
