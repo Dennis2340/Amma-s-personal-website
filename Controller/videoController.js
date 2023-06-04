@@ -24,7 +24,7 @@ const create = async function(req, res) {
     res.status(201).json({ 
       success: "True",
       message: "Video created successfully",
-     data: video 
+      data: video 
     
     });
 }catch(error){
