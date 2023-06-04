@@ -15,7 +15,7 @@ const addNewUser= async(req, res) => {
         const {  userEmail } = req.body
         if(userEmail  !== rolesEmail[0]) return res.status(500).json({msg : "You are not authorized to register"})
  
-        const { originalname, buffer } = req.files?.picture[0];
+        const { originalname, buffer } = req.file;
         const url = await uploadFileToFirebase(originalname, buffer)
         const passwordHashed = await bcrypt.hash(req.body.userPassword, 10)
 
