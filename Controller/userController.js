@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken")
 const rolesEmail = require("../config/roles_lists")
 const uploadFileToFirebase = require("../helperFunctions/videoHelper");
 const user = require("../Model/users");
-
+const admin = require("firebase-admin")
 const addNewUser= async(req, res) => {
     if(!req?.body?.userName || !req?.body?.userEmail || !req?.body?.userPassword){
         return res.status(400).json({message : "Name, Email and Password of the user are required"});
@@ -56,10 +56,10 @@ const addNewUser= async(req, res) => {
     }
 };
 
-const userInfo = async (req, res) => {
+const userPic = async (req, res) => {
     try {
       const singleUser = await user.findById(req.params.id);
-      if (!singleUser) return res.status(404).json({ message: "User not found" });
+      if (!singleUser) return res.status(404).json({ message: "User not found" , singleVideo});
   
       const url = singleUser.pictureUrl;
       const filename = url.split("/");
@@ -76,11 +76,22 @@ const userInfo = async (req, res) => {
         res.sendStatus(500);
       });
       stream.pipe(res);
+      
     } catch (error) {
-      console.error(`Error reading file ${filePath}:`, error);
+      console.error(`Error reading file :`, error);
       res.sendStatus(500);
     }
   };
+
+  const getUserInfo = async(req,res) => {
+    try {
+      const users = await user.find({})
+      return res.status(200).json({users})
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({ message: "Unable to get users" });
+    }
+  }
   
   
 const updateUser = async(req, res) => {
@@ -124,5 +135,6 @@ module.exports = {
     addNewUser,
     login,
     updateUser,
-    userInfo
+    userPic,
+    getUserInfo
 }

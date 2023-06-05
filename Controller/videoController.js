@@ -59,7 +59,7 @@ const getSingleVideo = async(req,res) => {
   try {
     const singleVideo = await Video.findById(req.params.id)
     if(!singleVideo) return res.status(404).json({message: "Video not found"})
-
+    
     
     const url = singleVideo.videoUrl
     const filename = url.split("/")

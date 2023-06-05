@@ -17,15 +17,38 @@ const upload = multer({ storage: storage });
 const userController = require("./Controller/userController")
 const verifyToken = require("./middleware/verifyJWT");
 const handleHeaderError = require("./middleware/handlesHeaderError");
+const admin = require("firebase-admin")
 // connects to mongodb 
 connectDB()
 
 app.use(express.json());
 app.use(cors(corsOption));
 
+///////// THE PICTURE URL ///////////////
+app.get("/user/userImage/:mainUrl", (req,res) => {
+ try {
+    const filename  = req.params.mainUrl
+
+    const bucket = admin.storage().bucket();
+    const file = bucket.file(filename);
+   
+     const stream = file.createReadStream();
+     stream.on('error', (err) => {
+       console.error(`Error streaming file ${filename}:`, err);
+       res.sendStatus(500);
+     });
+
+     stream.pipe(res);
+ } catch (error) {
+     console.error(`Error reading file`, error);
+      res.sendStatus(500);
+ }
+  
+})
 
 ///////// This is the user Routes and RestApi //////////////////
-app.get("/user/getUserInfo/:id", userController.userInfo)
+app.get("/user/getUserPic/:id", userController.userPic)
+app.get("/user/getUserInfo", userController.getUserInfo)
 app.post("/user/register",upload.single("picture"), handleHeaderError,userController.addNewUser)
 app.post("/user/login", userController.login)
 app.put("/user/updateUser/:id", userController.updateUser)
