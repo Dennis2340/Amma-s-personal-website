@@ -104,36 +104,31 @@ const login = async (req, res) => {
     }
 }
 
-const deleteUser = async(req, res) => {
+const deleteUser = async (req, res) => {
   try {
-    
-    ////// delete user from mongodb
-    const singleUser = await users.findById(req.params.id)
+    // Delete user from MongoDB
+    const singleUser = await users.findById(req.params.id);
     const deletedUser = await users.findByIdAndDelete(req.params.id);
     if (deletedUser) {
-      res.status(200).json({ message: "User deleted" });
+      // Delete the picture from Google Cloud Storage
+      const url = singleUser.pictureUrl;
+      const filename = url.split("/");
+      const filePath = filename[filename.length - 1];
+      const fileRef = admin.storage().bucket().file(filePath);
+
+      await fileRef.delete();
+      console.log("File deleted successfully.");
+
+      // Send user deletion response
+      return res.status(200).json({ message: "User deleted" });
     } else {
-      res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found" });
     }
-
-    ////// delete the picture from mongodb
-    const url = singleUser.pictureUrl
-    const filename = url.split("/")
-    const filePath  = filename[filename.length - 1]
-    const fileRef = admin.storage().bucket().file(filePath);
-
-    fileRef.delete()
-     .then(() => {
-       console.log('File deleted successfully.');
-     })
-      .catch((error) => {
-    console.error('Error deleting file:', error);
-  });
-
   } catch (error) {
-    res.status(500).json({error: error.message})
+    return res.status(500).json({ error: error.message });
   }
-}
+};
+
 
 
 module.exports = {
