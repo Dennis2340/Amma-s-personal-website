@@ -56,32 +56,6 @@ const addNewUser= async(req, res) => {
     }
 };
 
-const userPic = async (req, res) => {
-    try {
-      const singleUser = await user.findById(req.params.id);
-      if (!singleUser) return res.status(404).json({ message: "User not found" , singleVideo});
-  
-      const url = singleUser.pictureUrl;
-      const filename = url.split("/");
-      const filePath = filename[filename.length - 1];
-  
-      // Get a reference to the picture file in Firebase Storage
-      const bucket = admin.storage().bucket();
-      const file = bucket.file(filePath);
-  
-      // Stream the file contents to the client using the response object
-      const stream = file.createReadStream();
-      stream.on("error", (err) => {
-        console.error(`Error streaming file ${filePath}:`, err);
-        res.sendStatus(500);
-      });
-      stream.pipe(res);
-      
-    } catch (error) {
-      console.error(`Error reading file :`, error);
-      res.sendStatus(500);
-    }
-  };
 
   const getUserInfo = async(req,res) => {
     try {
@@ -130,11 +104,42 @@ const login = async (req, res) => {
     }
 }
 
+const deleteUser = async(req, res) => {
+  try {
+    
+    ////// delete user from mongodb
+    const singleUser = await users.findById(req.params.id)
+    const deletedUser = await users.findByIdAndDelete(req.params.id);
+    if (deletedUser) {
+      res.status(200).json({ message: "User deleted" });
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+
+    ////// delete the picture from mongodb
+    const url = singleUser.pictureUrl
+    const filename = url.split("/")
+    const filePath  = filename[filename.length - 1]
+    const fileRef = admin.storage().bucket().file(filePath);
+
+    fileRef.delete()
+     .then(() => {
+       console.log('File deleted successfully.');
+     })
+      .catch((error) => {
+    console.error('Error deleting file:', error);
+  });
+
+  } catch (error) {
+    res.status(500).json({error: error.message})
+  }
+}
+
 
 module.exports = {
     addNewUser,
     login,
     updateUser,
-    userPic,
-    getUserInfo
+    getUserInfo,
+    deleteUser
 }

@@ -52,6 +52,7 @@ app.get("/user/getUserInfo", userController.getUserInfo)
 app.post("/user/register",upload.single("picture"), handleHeaderError,userController.addNewUser)
 app.post("/user/login", userController.login)
 app.put("/user/updateUser/:id", userController.updateUser)
+app.delete("user/deleteUser/:id", userController.deleteUser)
 ///////// This is the poem Routes and RestApi //////////////////
 app.post("/poem/addPoem", verifyToken,poemController.addNewPoem);
 app.get("/poem/getAllPoems", poemController.getAllPoems);
